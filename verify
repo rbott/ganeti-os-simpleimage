@@ -1,0 +1,13 @@
+#!/usr/bin/python3
+
+from os import environ
+from ganeti_os_simpleimage.configuration import parse_environment, verify_os_parameters
+
+
+def main():
+    config = parse_environment()
+    verify_os_parameters(config["parameters"])
+
+
+if __name__ == "__main__":
+    main()

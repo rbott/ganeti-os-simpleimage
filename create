@@ -1,0 +1,40 @@
+#!/usr/bin/python3
+
+import sys
+from ganeti_os_simpleimage.configuration import parse_environment, verify_config
+from ganeti_os_simpleimage.source import acquire_image
+from ganeti_os_simpleimage.qemu_img import get_qcow2_real_size, convert_qcow2_to_blockdevice
+from ganeti_os_simpleimage.destination import get_blockdevice_size
+from ganeti_os_simpleimage.raw_img import get_raw_size, write_raw_image_to_blockdevice
+
+
+def main():
+    config = parse_environment()
+    verify_config(config)
+    image = acquire_image(config["parameters"]["source"])
+    if config["variant"] == "qcow2":
+        image_size = get_qcow2_real_size(image)
+    elif config["variant"] == "raw":
+        image_size = get_raw_size(image)
+    
+    # for now, we only support single-disk instances
+    destination = config["disks"][0]["path"]
+    if config["disks"][0]["type"] == "block":
+        destination_size = get_blockdevice_size(config["disks"][0]["path"])
+    else:
+        destination_size = sys.maxsize
+    
+    if image_size > destination_size:
+        size_diff = image_size - destination_size
+        print("Error: The image ({} Bytes) is {} Bytes larger than the destination ({} Bytes)".format(
+            image_size, size_diff, destination_size))
+        exit(1)
+    
+    if config["variant"] == "qcow2":
+        convert_qcow2_to_blockdevice(image, destination)
+    elif config["variant"] == "raw":
+        write_raw_image_to_blockdevice(image, destination)
+
+
+if __name__ == "__main__":
+    main()

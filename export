@@ -1,0 +1,13 @@
+#!/usr/bin/python3
+
+from os import environ
+from sys import exit
+
+
+def main():
+    print("Export is currently not supported by ganeti-os-simpleimage")
+    exit(1)
+
+
+if __name__ == "__main__":
+    main()

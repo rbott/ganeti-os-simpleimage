@@ -38,14 +38,14 @@ $ gnt-instance add -o simpleimage+qcow2 \
     debian-buster-nocloud
 ```
 
-This will download and store the image locally. If add another instance, the image will not be downloaded again, unless the size of the remote file has changed.
+This will download and store the image locally. If you add another instance, the image will not be downloaded again, unless the size of the remote file has changed.
 
 ### Local qcow2 Image
 
 This example uses a Juniper vSRX image from the local disk:
 
 ```shell
-$ gnt-instance add -o ganeti-os-simpleimage+qcow2 \
+$ gnt-instance add -o simpleimage+qcow2 \
     --os-parameters="source=/var/lib/ganeti-os-simpleimage/junos-media-vsrx-x86-64-vmdisk-18.1R2.6.qcow2" \
     -B memory=4G --disk 0:size=17G \
     --no-name-check --no-ip-check \

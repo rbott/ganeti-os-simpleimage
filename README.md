@@ -1,6 +1,6 @@
 # ganeti-os-simpleimage
 
-A (very) simple image based OS provider for Ganeti
+A (very) simple image based OS provider for Ganeti. It allows you to create an instance off a local image file or it can also download images through http(s) for you and cache them locally. Either raw or qcow2 images are supported. It does not interact in any way with the image (expanding filesystems, configuring users or IP addresses). This allows you to build and use your own templates/images or to install prebuild images like [Debian Cloud Images](http://cloud.debian.org/images/cloud/) or software distributed as disk images like Juniper vMX, vSRX or vQFX or Github Enterprise.
 
 ## Requirements
 
@@ -15,7 +15,7 @@ $ cd /usr/share/ganeti/os
 $ git clone git@github.com:rbott/ganeti-os-simpleimage simple-image
 ```
 
-Ganeti should automatically pick up the new OS provider and show a similar output to this:
+Ganeti should automatically pick up the new OS provider and show output similar to this:
 ```shell
 $ gnt-os list
 Name                       
@@ -38,7 +38,7 @@ $ gnt-instance add -o simpleimage+qcow2 \
     debian-buster-nocloud
 ```
 
-This will download and store the image locally. If you add another instance, the image will not be downloaded again, unless the size of the remote file has changed.
+This will download and cache the image locally. If you add another instance, the image will not be downloaded again, unless the size of the remote file has changed.
 
 ### Local qcow2 Image
 
@@ -51,6 +51,8 @@ $ gnt-instance add -o simpleimage+qcow2 \
     --no-name-check --no-ip-check \
     junos-vsrx-18.1
 ```
+
+You can access the local console of your JunOS instance using `gnt-instance console junos-vsrx-18.1`.
 
 ## Testing & Development
 

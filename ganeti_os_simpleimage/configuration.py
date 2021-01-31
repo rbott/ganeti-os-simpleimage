@@ -49,7 +49,7 @@ def parse_environment():
                 config["disks"].append(disk)
         elif key.startswith("OSP_"):
             param_name = key.split("_", 1)[1]
-            config["parameters"][param_name] = value
+            config["parameters"][param_name.lower()] = value
             
     return config
 

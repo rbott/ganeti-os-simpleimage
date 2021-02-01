@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 from os import environ
+from os import path
 from sys import exit
 
 EXPECTED_OS_PARAMETERS = [
@@ -73,6 +74,9 @@ def verify_disk_parameters(disks):
         if not disk["path"]:
             print("Error: disk {} has no path set".format(disk["id"]))
             exit(1)
+
+        if not path.exists(disk["path"]):
+            print("Error: path/device {} for disk {} does not exist".format(disk["path"], disk["id"]))
         
         if not disk["type"]:
             print("Error: disk {} has no type set".format(disk["id"]))

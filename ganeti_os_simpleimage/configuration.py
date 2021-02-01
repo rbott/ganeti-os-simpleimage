@@ -14,6 +14,7 @@ ALLOWED_OS_VARIANTS = [
 ]
 
 def get_disk_param(disk_id, param_name):
+    """Return given disk parameter for given disk id."""
     env_var_name = "DISK_{}_{}".format(disk_id, param_name)
     if env_var_name in environ:
         return environ[env_var_name]
@@ -22,6 +23,7 @@ def get_disk_param(disk_id, param_name):
 
 
 def parse_environment():
+    """Parse all required config variables from the environment"""
     config = {
         'instance_name': '',
         'hypervisor': '',

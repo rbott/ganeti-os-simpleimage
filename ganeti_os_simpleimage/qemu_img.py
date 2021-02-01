@@ -5,6 +5,7 @@ from sys import exit
 import json
 
 def run_qemu_img_with_json_output(mode, parameters):
+    """Helper function to run qemu-img with output as JSON"""
     cmd = [
         "/usr/bin/qemu-img",
         mode,
@@ -25,6 +26,7 @@ def run_qemu_img_with_json_output(mode, parameters):
 
 
 def run_qemu_img(parameters):
+    """Helper function to run qemu-img with arbitrary parameters."""
     cmd = [
         "/usr/bin/qemu-img"
     ]
@@ -38,11 +40,13 @@ def run_qemu_img(parameters):
 
 
 def get_qcow2_real_size(image):
+    """Run qemu-img to get the size of the (expanded) qcow2 image."""
     info = run_qemu_img_with_json_output("info", [ image ])
     return info["virtual-size"]
 
 
 def convert_qcow2_to_blockdevice(source, destination):
+    """Run qemu-img to convert a qcow2 to raw."""
     print("Writing qcow2 image to blockdevice...", end="")
     run_qemu_img([
         "convert",

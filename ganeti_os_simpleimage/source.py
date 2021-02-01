@@ -4,33 +4,51 @@ from sys import exit
 from os import path
 import urllib.request
 import urllib.parse
-import posixpath
 import shutil
 import tempfile
 
 
-def is_local_filepath(source):
-    return source.startswith("/")
+def is_local_filepath(filepath):
+    """Determine if the given path is a local path."""
+    return filepath.startswith("/")
 
 
-def is_http_url(source):
-    return source.startswith("http://") or source.startswith("https://")
+def is_http_url(filepath):
+    """Determine if the given path is a http(s) URL."""
+    return filepath.startswith("http://") or filepath.startswith("https://")
 
 
-def is_accessible_file(source):
-    return path.exists(source) and path.isfile(source)
+def is_accessible_file(filepath):
+    """Determine if the given path exists and is a regular file."""
+    return path.exists(filepath) and path.isfile(filepath)
 
 
 def extract_filename(content_disposition_header, url):
+    """Extract the filename from the Content-Disposition
+    HTTP Header (if present) - or use the last part of the URL.
+
+    Error out if the extracted string is empty.
+    """
     if content_disposition_header:
         filename = content_disposition_header.split("\"")[1]
+        # sanitize filename from Content-Disposition header
+        filename = path.basename(filename)
     else:
         url_parsed = urllib.parse.urlparse(url)
         filename = path.basename(url_parsed.path)
+    if not filename:
+        print("Error: could neither generate a valid filename from Content-Disposition header nor from download URL.")
+        exit(1)
     return filename
 
 
 def is_download_required(image_url):
+    """Determine if a fresh download is required.
+
+    Either because the file is not yet there or because
+    the size of the file has changed on the remote server.
+    """
+
     req = urllib.request.Request(image_url, method="HEAD")
     r = urllib.request.urlopen(req)
     filename = "/tmp/{}".format(extract_filename(
@@ -47,6 +65,7 @@ def is_download_required(image_url):
 
 
 def download_file(image_url, local_filename):
+    """Perform the HTTP(S) download of the given URL."""
     download_location = tempfile.NamedTemporaryFile(delete=False)
     req = urllib.request.Request(image_url)
     with urllib.request.urlopen(req) as in_stream, open(download_location.name, 'wb') as out_file:
@@ -55,6 +74,10 @@ def download_file(image_url, local_filename):
 
 
 def acquire_image(source):
+    """Return the filename of the image to write to the target device.
+    
+    Takes care of the download if the file is stored remotely.
+    """
     if is_local_filepath(source):
         if not is_accessible_file(source):
             print("Error: '{}' does not exist or is not a regular file".format(source))

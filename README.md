@@ -20,6 +20,7 @@ As long as there are no official releases, you can simply do the following:
 ```shell
 $ cd /usr/share/ganeti/os
 $ git clone git@github.com:rbott/ganeti-os-simpleimage simple-image
+$ mkdir /var/cache/ganeti-os-simpleimage
 ```
 
 Ganeti should automatically pick up the new OS provider and show output similar to this:

@@ -51,7 +51,7 @@ def is_download_required(image_url):
 
     req = urllib.request.Request(image_url, method="HEAD")
     r = urllib.request.urlopen(req)
-    filename = "/tmp/{}".format(extract_filename(
+    filename = "/var/cache/ganeti-os-simpleimage/{}".format(extract_filename(
         r.getheader('Content-Disposition'), r.geturl()))
     if not path.exists(filename):
         return True, filename

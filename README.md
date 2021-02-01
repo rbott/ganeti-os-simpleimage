@@ -4,7 +4,14 @@ A (very) simple image based OS provider for Ganeti. It allows you to create an i
 
 ## Requirements
 
-ganeti-os-simpleimage requires plain Python 3.6+ without any extra modules. However, you need `dd` for raw images and `qemu-img` for qcow2 images installed on your Ganeti machine. Currently this OS provider has only been tested in a KVM environment!
+ganeti-os-simpleimage requires plain Python 3.6+ without any extra modules. However, you need `dd` for raw images and `qemu-img` for qcow2 images installed on your Ganeti machine.
+
+## Supported Environments
+
+This OS provider has been tested with the following environments:
+
+- Hypervisors: KVM
+- Disk templates: plain, file (others are untested as of yet, but should work)
 
 ## Installation
 
